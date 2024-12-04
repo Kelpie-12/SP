@@ -86,8 +86,13 @@ namespace Hw_manager
 			}
 			else
 			{
-				listViewProcesses.Columns.Remove(h);
+				listViewProcesses.Columns.RemoveAt(3);
 			}
+		}
+
+		private void hightToolStripMenuViewRateL_Click(object sender, EventArgs e)
+		{
+			timer.Interval= 3000;
 		}
 	}
 }

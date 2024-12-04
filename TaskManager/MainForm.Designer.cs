@@ -31,29 +31,31 @@
 			this.components = new System.ComponentModel.Container();
 			this.menStripMainMenu = new System.Windows.Forms.MenuStrip();
 			this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.exitToolStripMenuFileExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.runToolStripMenuFileRun = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.exitToolStripMenuFileExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.topmostToolStripMenuViewTopmost = new System.Windows.Forms.ToolStripMenuItem();
 			this.hideWhenMinimizedToolStripMenuViewHide = new System.Windows.Forms.ToolStripMenuItem();
-			this.selectColumnsToolStripMenuViewColums = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+			this.selectColumnsToolStripMenuViewColums = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.refreshToolStripMenuViewRefrech = new System.Windows.Forms.ToolStripMenuItem();
 			this.refreshRateToolStripMenuRefreshRate = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-			this.statusStripMain = new System.Windows.Forms.StatusStrip();
 			this.hightToolStripMenuViewRateH = new System.Windows.Forms.ToolStripMenuItem();
 			this.hightToolStripMenuViewRateN = new System.Windows.Forms.ToolStripMenuItem();
 			this.hightToolStripMenuViewRateL = new System.Windows.Forms.ToolStripMenuItem();
+			this.statusStripMain = new System.Windows.Forms.StatusStrip();
 			this.tabConMain = new System.Windows.Forms.TabControl();
 			this.tabPageProcesses = new System.Windows.Forms.TabPage();
-			this.tabPagePerphormance = new System.Windows.Forms.TabPage();
 			this.listViewProcesses = new System.Windows.Forms.ListView();
-			this.timer = new System.Windows.Forms.Timer(this.components);
-			this.listViewColumnProcessName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.listViewColumnPID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.listViewColumnProcessName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.tabPagePerphormance = new System.Windows.Forms.TabPage();
+			this.timer = new System.Windows.Forms.Timer(this.components);
+			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.menStripMainMenu.SuspendLayout();
+			this.statusStripMain.SuspendLayout();
 			this.tabConMain.SuspendLayout();
 			this.tabPageProcesses.SuspendLayout();
 			this.SuspendLayout();
@@ -81,22 +83,23 @@
 			this.runToolStripMenuItem.Size = new System.Drawing.Size(59, 29);
 			this.runToolStripMenuItem.Text = "File";
 			// 
-			// exitToolStripMenuFileExit
-			// 
-			this.exitToolStripMenuFileExit.Name = "exitToolStripMenuFileExit";
-			this.exitToolStripMenuFileExit.Size = new System.Drawing.Size(180, 30);
-			this.exitToolStripMenuFileExit.Text = "Exit";
-			// 
 			// runToolStripMenuFileRun
 			// 
 			this.runToolStripMenuFileRun.Name = "runToolStripMenuFileRun";
 			this.runToolStripMenuFileRun.Size = new System.Drawing.Size(180, 30);
 			this.runToolStripMenuFileRun.Text = "Run";
+			this.runToolStripMenuFileRun.Click += new System.EventHandler(this.runToolStripMenuFileRun_Click);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
 			this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+			// 
+			// exitToolStripMenuFileExit
+			// 
+			this.exitToolStripMenuFileExit.Name = "exitToolStripMenuFileExit";
+			this.exitToolStripMenuFileExit.Size = new System.Drawing.Size(180, 30);
+			this.exitToolStripMenuFileExit.Text = "Exit";
 			// 
 			// viewToolStripMenuItem
 			// 
@@ -127,16 +130,21 @@
 			this.hideWhenMinimizedToolStripMenuViewHide.Size = new System.Drawing.Size(287, 30);
 			this.hideWhenMinimizedToolStripMenuViewHide.Text = "Hide when minimized";
 			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(284, 6);
+			// 
 			// selectColumnsToolStripMenuViewColums
 			// 
 			this.selectColumnsToolStripMenuViewColums.Name = "selectColumnsToolStripMenuViewColums";
 			this.selectColumnsToolStripMenuViewColums.Size = new System.Drawing.Size(287, 30);
 			this.selectColumnsToolStripMenuViewColums.Text = "Select columns";
 			// 
-			// toolStripSeparator2
+			// toolStripSeparator3
 			// 
-			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(284, 6);
+			this.toolStripSeparator3.Name = "toolStripSeparator3";
+			this.toolStripSeparator3.Size = new System.Drawing.Size(284, 6);
 			// 
 			// refreshToolStripMenuViewRefrech
 			// 
@@ -154,37 +162,34 @@
 			this.refreshRateToolStripMenuRefreshRate.Size = new System.Drawing.Size(287, 30);
 			this.refreshRateToolStripMenuRefreshRate.Text = "Refresh rate";
 			// 
-			// toolStripSeparator3
+			// hightToolStripMenuViewRateH
 			// 
-			this.toolStripSeparator3.Name = "toolStripSeparator3";
-			this.toolStripSeparator3.Size = new System.Drawing.Size(284, 6);
+			this.hightToolStripMenuViewRateH.Name = "hightToolStripMenuViewRateH";
+			this.hightToolStripMenuViewRateH.Size = new System.Drawing.Size(152, 30);
+			this.hightToolStripMenuViewRateH.Text = "High";
+			// 
+			// hightToolStripMenuViewRateN
+			// 
+			this.hightToolStripMenuViewRateN.Name = "hightToolStripMenuViewRateN";
+			this.hightToolStripMenuViewRateN.Size = new System.Drawing.Size(152, 30);
+			this.hightToolStripMenuViewRateN.Text = "Normal";
+			// 
+			// hightToolStripMenuViewRateL
+			// 
+			this.hightToolStripMenuViewRateL.Name = "hightToolStripMenuViewRateL";
+			this.hightToolStripMenuViewRateL.Size = new System.Drawing.Size(152, 30);
+			this.hightToolStripMenuViewRateL.Text = "Low";
 			// 
 			// statusStripMain
 			// 
+			this.statusStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
 			this.statusStripMain.Location = new System.Drawing.Point(0, 420);
 			this.statusStripMain.Name = "statusStripMain";
 			this.statusStripMain.Padding = new System.Windows.Forms.Padding(2, 0, 28, 0);
 			this.statusStripMain.Size = new System.Drawing.Size(455, 22);
 			this.statusStripMain.TabIndex = 1;
 			this.statusStripMain.Text = "statusStrip1";
-			// 
-			// hightToolStripMenuViewRateH
-			// 
-			this.hightToolStripMenuViewRateH.Name = "hightToolStripMenuViewRateH";
-			this.hightToolStripMenuViewRateH.Size = new System.Drawing.Size(180, 30);
-			this.hightToolStripMenuViewRateH.Text = "High";
-			// 
-			// hightToolStripMenuViewRateN
-			// 
-			this.hightToolStripMenuViewRateN.Name = "hightToolStripMenuViewRateN";
-			this.hightToolStripMenuViewRateN.Size = new System.Drawing.Size(180, 30);
-			this.hightToolStripMenuViewRateN.Text = "Normal";
-			// 
-			// hightToolStripMenuViewRateL
-			// 
-			this.hightToolStripMenuViewRateL.Name = "hightToolStripMenuViewRateL";
-			this.hightToolStripMenuViewRateL.Size = new System.Drawing.Size(180, 30);
-			this.hightToolStripMenuViewRateL.Text = "Low";
 			// 
 			// tabConMain
 			// 
@@ -208,16 +213,6 @@
 			this.tabPageProcesses.Text = "Processes";
 			this.tabPageProcesses.UseVisualStyleBackColor = true;
 			// 
-			// tabPagePerphormance
-			// 
-			this.tabPagePerphormance.Location = new System.Drawing.Point(4, 34);
-			this.tabPagePerphormance.Name = "tabPagePerphormance";
-			this.tabPagePerphormance.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPagePerphormance.Size = new System.Drawing.Size(532, 275);
-			this.tabPagePerphormance.TabIndex = 1;
-			this.tabPagePerphormance.Text = "Perphormance";
-			this.tabPagePerphormance.UseVisualStyleBackColor = true;
-			// 
 			// listViewProcesses
 			// 
 			this.listViewProcesses.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -235,21 +230,37 @@
 			this.listViewProcesses.UseCompatibleStateImageBehavior = false;
 			this.listViewProcesses.View = System.Windows.Forms.View.Details;
 			// 
-			// timer
+			// listViewColumnPID
 			// 
-			this.timer.Enabled = true;
-			this.timer.Interval = 1000;
-			this.timer.Tick += new System.EventHandler(this.timer_Tick);
+			this.listViewColumnPID.Text = "PID";
+			this.listViewColumnPID.Width = 91;
 			// 
 			// listViewColumnProcessName
 			// 
 			this.listViewColumnProcessName.Text = "Name";
 			this.listViewColumnProcessName.Width = 300;
 			// 
-			// listViewColumnPID
+			// tabPagePerphormance
 			// 
-			this.listViewColumnPID.Text = "PID";
-			this.listViewColumnPID.Width = 91;
+			this.tabPagePerphormance.Location = new System.Drawing.Point(4, 34);
+			this.tabPagePerphormance.Name = "tabPagePerphormance";
+			this.tabPagePerphormance.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPagePerphormance.Size = new System.Drawing.Size(447, 345);
+			this.tabPagePerphormance.TabIndex = 1;
+			this.tabPagePerphormance.Text = "Perphormance";
+			this.tabPagePerphormance.UseVisualStyleBackColor = true;
+			// 
+			// timer
+			// 
+			this.timer.Enabled = true;
+			this.timer.Interval = 1000;
+			this.timer.Tick += new System.EventHandler(this.timer_Tick);
+			// 
+			// toolStripStatusLabel1
+			// 
+			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+			this.toolStripStatusLabel1.Size = new System.Drawing.Size(112, 17);
+			this.toolStripStatusLabel1.Text = "toolStripStatusLabel";
 			// 
 			// MainForm
 			// 
@@ -262,11 +273,13 @@
 			this.DoubleBuffered = true;
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.MainMenuStrip = this.menStripMainMenu;
-			this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+			this.Margin = new System.Windows.Forms.Padding(6);
 			this.Name = "MainForm";
 			this.Text = "Manager";
 			this.menStripMainMenu.ResumeLayout(false);
 			this.menStripMainMenu.PerformLayout();
+			this.statusStripMain.ResumeLayout(false);
+			this.statusStripMain.PerformLayout();
 			this.tabConMain.ResumeLayout(false);
 			this.tabPageProcesses.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -300,6 +313,7 @@
 		private System.Windows.Forms.Timer timer;
 		private System.Windows.Forms.ColumnHeader listViewColumnProcessName;
 		private System.Windows.Forms.ColumnHeader listViewColumnPID;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
 	}
 }
 
