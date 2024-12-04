@@ -1,72 +1,92 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Management;
-using System.Windows.Forms;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Hw_manager
 {
 	public partial class MainForm : Form
 	{
-		private List<Process> processes = null;
+		//private Dictionary<int, Process> processes = new Dictionary<int, Process>();
+		private List<Process> processes = new List<Process>();
+		private List<Process> _processes = new List<Process>();
 		public MainForm()
 		{
 			InitializeComponent();
+
 		}
-		private void GetProcesses()
+		private void LoadProcessesList()
 		{
-			processes.Clear();
-			processes=Process.GetProcesses().ToList();
-		}
-		private void RefreshProcessesList()
-		{
-			listViewProcess.Items.Clear();
-			foreach (Process process in processes) 
+			processes = Process.GetProcesses().ToList();
+			for (int i = 0; i < processes.Count; i++)
 			{
-				string[] row = new string[] { process.ProcessName, };
-				listViewProcess.Items.Add(new ListViewItem(row));
-				}
-			lableProcess.Text = "Запущено " + processes.Count.ToString();
-		}
-		private void killProcess(Process process)
-		{
-			process.Kill();
-			process.WaitForExit();
+				string[] row = new string[] { processes[i].Id.ToString(), processes[i].ProcessName, (processes[i].PagedMemorySize / 1024).ToString(), processes[i].ProcessName };
+				listViewProcesses.Items.Add(new ListViewItem(row));
+			}
+			listViewProcesses.Sort();
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			processes = new List<Process>();
-			GetProcesses();
+			LoadProcessesList();
+		}
+
+		private void timer_Tick(object sender, EventArgs e)
+		{
 			RefreshProcessesList();
 		}
 
-		private void btnRefrech_Click(object sender, EventArgs e)
+		private void RefreshProcessesList()
 		{
-			GetProcesses();
-			RefreshProcessesList();
-		}
-
-		private void btnStop_Click(object sender, EventArgs e)
-		{
-			try
+			Dictionary<int, Process> newProcess = Process.GetProcesses().ToDictionary(p => p.Id);
+			for (int i = listViewProcesses.Items.Count - 1; i >= 0; i--)
 			{
-				if (listViewProcess.SelectedItems[0]!=null)
+				ListViewItem item = listViewProcesses.Items[i];
+				if (!newProcess.ContainsKey(Convert.ToInt32(item.Text)))
 				{
-					Process process = processes.Where((x) => x.ProcessName == listViewProcess.SelectedItems[0].SubItems[0].Text).ToList()[0];
-					killProcess(process);
-					GetProcesses();
-					RefreshProcessesList();
+					listViewProcesses.Items.Remove(item);
 				}
 			}
-			catch (Exception)
+			foreach (var item in newProcess)
 			{
-				MessageBox.Show("Ошибка! Невозможно завершить процесс");				
+				if (listViewProcesses.Items.ContainsKey(item.Value.Id.ToString()) == false)
+				{
+				}
+				else
+				{
+					string [] row = new string[] { item.Value.Id.ToString(), item.Value.ProcessName, (item.Value.PagedMemorySize / 1024).ToString(),item.Value.ProcessName };
+					listViewProcesses.Items.Add(new ListViewItem(row));
+
+				}
+			}
+		}
+		
+
+		private void topmostToolStripMenuViewTopmost_Click(object sender, EventArgs e)
+		{
+			if (topmostToolStripMenuViewTopmost.Checked)
+				this.TopMost = true;
+			else this.TopMost = false;
+
+		}
+
+		private void adressToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			ColumnHeader h = new ColumnHeader();
+			h.Name = "Adress";
+			h.Width = 120;
+			h.Text = "Adress";
+			if (adressToolStripMenuItem.Checked)
+			{
+				listViewProcesses.Columns.Add(h);
+				RefreshProcessesList();
+			}
+			else
+			{
+				listViewProcesses.Columns.Remove(h);
 			}
 		}
 	}
