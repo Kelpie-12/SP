@@ -52,12 +52,14 @@ namespace TaskManager
 			RemoveOldProcesses();
 			AddNewProcesses();
 		}
+		void DestroyProcess(int pid)
+		{
+			processes[pid].Kill();
+		}
 		private void timer_Tick(object sender, EventArgs e)
 		{
 			RefreshProcesses();
-			toolStripStatusLabel1.Text= $"Processes count: {listViewProcesses.Items.Count}";
-
-
+			toolStripStatusLabel1.Text = $"Processes count: {listViewProcesses.Items.Count}";
 		}
 
 		private void runToolStripMenuFileRun_Click(object sender, EventArgs e)
@@ -67,5 +69,18 @@ namespace TaskManager
 
 		[DllImport("shell32.dll", EntryPoint = "#61", CharSet = CharSet.Unicode)]
 		public static extern int RunFileDlg([In] IntPtr hwnd, [In] IntPtr icon, [In] string path, [In] string title, [In] string promt, [In] uint flags);
+
+		private void destroyToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (Convert.ToInt32(listViewProcesses.SelectedItems.Count) > 0)
+				DestroyProcess(Convert.ToInt32(listViewProcesses.SelectedItems[0].Name));
+		}
+
+		private void contextMenuStripProcList_Opening(object sender, CancelEventArgs e)
+		{
+			if (Convert.ToInt32(listViewProcesses.SelectedItems.Count) <= 0)
+				destroyToolStripMenuItem.Enabled = openFileLocationToolStripMenuItem.Enabled = false;
+			else destroyToolStripMenuItem.Enabled = openFileLocationToolStripMenuItem.Enabled = true;
+		}
 	}
 }
