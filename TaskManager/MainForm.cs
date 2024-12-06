@@ -13,16 +13,22 @@ namespace TaskManager
 	public partial class MainForm : Form
 	{
 		Dictionary<int, Process> processes;
+		ListViewColumnSorter lvColumnSorter;
 		public MainForm()
 		{
 			InitializeComponent();
 			LoadProcesses();
+			foreach (ColumnHeader ch in listViewProcesses.Columns)
+				ch.Width = -2;
+			lvColumnSorter = new ListViewColumnSorter();
+			listViewProcesses.ListViewItemSorter = lvColumnSorter;
 		}
 		void LoadProcesses()
 		{
 			processes = Process.GetProcesses().ToDictionary(i => i.Id);
 			foreach (KeyValuePair<int, Process> p in processes)
 				AddNewProcesses(p.Value);
+
 
 		}
 		void AddNewProcesses()
@@ -34,7 +40,7 @@ namespace TaskManager
 		void AddNewProcesses(Process p)
 		{
 			ListViewItem item = new ListViewItem();
-			item.Name =p.Id.ToString();
+			item.Name = p.Id.ToString();
 			item.Text = p.ProcessName;
 			item.SubItems.Add(p.Id.ToString());
 			listViewProcesses.Items.Add(item);
@@ -52,6 +58,7 @@ namespace TaskManager
 			processes = Process.GetProcesses().ToDictionary(i => i.Id);
 			RemoveOldProcesses();
 			AddNewProcesses();
+
 		}
 		void DestroyProcess(int pid)
 		{
@@ -86,14 +93,29 @@ namespace TaskManager
 
 		private void openFileLocationToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			string filename=processes[Convert.ToInt32(listViewProcesses.SelectedItems[0].Name)].MainModule.FileName;
+			string filename = processes[Convert.ToInt32(listViewProcesses.SelectedItems[0].Name)].MainModule.FileName;
 			//filename = filename.Remove(filename.LastIndexOf("\\"));
 			ShellExecute(this.Handle, "open", "explorer.exe", $"/select, \"{filename}\"", "", 1);
-		
+
 			//MessageBox.Show(filename,"Location",MessageBoxButtons.OK,MessageBoxIcon.Information);
 		}
 		[DllImport("shell32.dll")]
-		static extern IntPtr ShellExecute(IntPtr hwnd, string lpOperation, string lpFile, string lpParameters, string lpDirectory,int nCmdShow);
-		
+		static extern IntPtr ShellExecute(IntPtr hwnd, string lpOperation, string lpFile, string lpParameters, string lpDirectory, int nCmdShow);
+
+		private void listViewProcesses_ColumnClick(object sender, ColumnClickEventArgs e)
+		{
+			if (e.Column == lvColumnSorter.SortColumn)
+			{
+				if (lvColumnSorter.Order == SortOrder.Ascending)
+					lvColumnSorter.Order = SortOrder.Descending;
+				else lvColumnSorter.Order = SortOrder.Ascending;
+			}
+			else
+			{
+				lvColumnSorter.SortColumn = e.Column;
+				lvColumnSorter.Order= SortOrder.Ascending;
+			}
+			listViewProcesses.Sort();
+		}
 	}
 }

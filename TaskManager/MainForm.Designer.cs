@@ -69,7 +69,7 @@
 			// listViewColumnPID
 			// 
 			listViewColumnPID.Text = "PID";
-			listViewColumnPID.Width = 91;
+			listViewColumnPID.Width = 609;
 			// 
 			// menStripMainMenu
 			// 
@@ -79,7 +79,7 @@
 			this.menStripMainMenu.Location = new System.Drawing.Point(0, 0);
 			this.menStripMainMenu.Name = "menStripMainMenu";
 			this.menStripMainMenu.Padding = new System.Windows.Forms.Padding(12, 4, 0, 4);
-			this.menStripMainMenu.Size = new System.Drawing.Size(455, 37);
+			this.menStripMainMenu.Size = new System.Drawing.Size(695, 37);
 			this.menStripMainMenu.TabIndex = 0;
 			this.menStripMainMenu.Text = "menuStrip1";
 			// 
@@ -195,10 +195,10 @@
 			// 
 			this.statusStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-			this.statusStripMain.Location = new System.Drawing.Point(0, 420);
+			this.statusStripMain.Location = new System.Drawing.Point(0, 472);
 			this.statusStripMain.Name = "statusStripMain";
 			this.statusStripMain.Padding = new System.Windows.Forms.Padding(2, 0, 28, 0);
-			this.statusStripMain.Size = new System.Drawing.Size(455, 22);
+			this.statusStripMain.Size = new System.Drawing.Size(695, 22);
 			this.statusStripMain.TabIndex = 1;
 			this.statusStripMain.Text = "statusStrip1";
 			// 
@@ -216,7 +216,7 @@
 			this.tabConMain.Location = new System.Drawing.Point(0, 37);
 			this.tabConMain.Name = "tabConMain";
 			this.tabConMain.SelectedIndex = 0;
-			this.tabConMain.Size = new System.Drawing.Size(455, 383);
+			this.tabConMain.Size = new System.Drawing.Size(695, 435);
 			this.tabConMain.TabIndex = 2;
 			// 
 			// tabPageProcesses
@@ -225,7 +225,7 @@
 			this.tabPageProcesses.Location = new System.Drawing.Point(4, 34);
 			this.tabPageProcesses.Name = "tabPageProcesses";
 			this.tabPageProcesses.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPageProcesses.Size = new System.Drawing.Size(447, 345);
+			this.tabPageProcesses.Size = new System.Drawing.Size(687, 397);
 			this.tabPageProcesses.TabIndex = 0;
 			this.tabPageProcesses.Text = "Processes";
 			this.tabPageProcesses.UseVisualStyleBackColor = true;
@@ -244,15 +244,16 @@
 			this.listViewProcesses.Location = new System.Drawing.Point(3, 3);
 			this.listViewProcesses.MultiSelect = false;
 			this.listViewProcesses.Name = "listViewProcesses";
-			this.listViewProcesses.Size = new System.Drawing.Size(441, 339);
+			this.listViewProcesses.Size = new System.Drawing.Size(681, 391);
 			this.listViewProcesses.TabIndex = 0;
 			this.listViewProcesses.UseCompatibleStateImageBehavior = false;
 			this.listViewProcesses.View = System.Windows.Forms.View.Details;
+			this.listViewProcesses.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listViewProcesses_ColumnClick);
 			// 
 			// listViewColumnProcessName
 			// 
 			this.listViewColumnProcessName.Text = "Name";
-			this.listViewColumnProcessName.Width = 300;
+			this.listViewColumnProcessName.Width = 200;
 			// 
 			// contextMenuStripProcList
 			// 
@@ -303,7 +304,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(455, 442);
+			this.ClientSize = new System.Drawing.Size(695, 494);
 			this.Controls.Add(this.tabConMain);
 			this.Controls.Add(this.statusStripMain);
 			this.Controls.Add(this.menStripMainMenu);
