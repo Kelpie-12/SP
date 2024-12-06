@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -10,9 +11,8 @@ namespace Hw_manager
 {
 	public partial class MainForm : Form
 	{
-		//private Dictionary<int, Process> processes = new Dictionary<int, Process>();
+		private string search = "";
 		private List<Process> processes = new List<Process>();
-		private List<Process> _processes = new List<Process>();
 		public MainForm()
 		{
 			InitializeComponent();
@@ -28,7 +28,6 @@ namespace Hw_manager
 			}
 			listViewProcesses.Sort();
 		}
-
 		private void MainForm_Load(object sender, EventArgs e)
 		{
 			LoadProcessesList();
@@ -93,6 +92,20 @@ namespace Hw_manager
 		private void hightToolStripMenuViewRateL_Click(object sender, EventArgs e)
 		{
 			timer.Interval= 3000;
+		}
+
+		private void listViewProcesses_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			//if ((!char.IsControl(e.KeyChar)) && (char.IsLetter(e.KeyChar)))
+			//{
+			//	e.Handled = true;
+			//	search += e.KeyChar.ToString();				
+			//	ListViewItem item = listViewProcesses.FindItemWithText(search);
+			//	listViewProcesses.Items[item.Index].Selected=true;
+			//	listViewProcesses.Items[item.Index].Focused= true;
+			//	//listViewProcesses.SelectedItems[item.Index].Selected = true;
+			//}
+			
 		}
 	}
 }

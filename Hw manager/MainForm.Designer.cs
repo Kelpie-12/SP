@@ -175,19 +175,19 @@
 			// hightToolStripMenuViewRateH
 			// 
 			this.hightToolStripMenuViewRateH.Name = "hightToolStripMenuViewRateH";
-			this.hightToolStripMenuViewRateH.Size = new System.Drawing.Size(180, 30);
+			this.hightToolStripMenuViewRateH.Size = new System.Drawing.Size(152, 30);
 			this.hightToolStripMenuViewRateH.Text = "High";
 			// 
 			// hightToolStripMenuViewRateN
 			// 
 			this.hightToolStripMenuViewRateN.Name = "hightToolStripMenuViewRateN";
-			this.hightToolStripMenuViewRateN.Size = new System.Drawing.Size(180, 30);
+			this.hightToolStripMenuViewRateN.Size = new System.Drawing.Size(152, 30);
 			this.hightToolStripMenuViewRateN.Text = "Normal";
 			// 
 			// hightToolStripMenuViewRateL
 			// 
 			this.hightToolStripMenuViewRateL.Name = "hightToolStripMenuViewRateL";
-			this.hightToolStripMenuViewRateL.Size = new System.Drawing.Size(180, 30);
+			this.hightToolStripMenuViewRateL.Size = new System.Drawing.Size(152, 30);
 			this.hightToolStripMenuViewRateL.Text = "Low";
 			this.hightToolStripMenuViewRateL.Click += new System.EventHandler(this.hightToolStripMenuViewRateL_Click);
 			// 
@@ -232,6 +232,7 @@
 			this.listViewProcesses.TabIndex = 0;
 			this.listViewProcesses.UseCompatibleStateImageBehavior = false;
 			this.listViewProcesses.View = System.Windows.Forms.View.Details;
+			this.listViewProcesses.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.listViewProcesses_KeyPress);
 			// 
 			// listViewColumnPID
 			// 

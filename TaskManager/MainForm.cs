@@ -34,15 +34,16 @@ namespace TaskManager
 		void AddNewProcesses(Process p)
 		{
 			ListViewItem item = new ListViewItem();
-			item.Name = item.Text = p.Id.ToString();
-			item.SubItems.Add(p.ProcessName);
+			item.Name =p.Id.ToString();
+			item.Text = p.ProcessName;
+			item.SubItems.Add(p.Id.ToString());
 			listViewProcesses.Items.Add(item);
 		}
 		void RemoveOldProcesses()
 		{
 			foreach (ListViewItem i in listViewProcesses.Items)
 			{
-				if (!processes.ContainsKey(Convert.ToInt32(i.SubItems[0].Text)))
+				if (!processes.ContainsKey(Convert.ToInt32(i.SubItems[1].Text)))
 					listViewProcesses.Items.Remove(i);
 			}
 		}
@@ -82,5 +83,17 @@ namespace TaskManager
 				destroyToolStripMenuItem.Enabled = openFileLocationToolStripMenuItem.Enabled = false;
 			else destroyToolStripMenuItem.Enabled = openFileLocationToolStripMenuItem.Enabled = true;
 		}
+
+		private void openFileLocationToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			string filename=processes[Convert.ToInt32(listViewProcesses.SelectedItems[0].Name)].MainModule.FileName;
+			//filename = filename.Remove(filename.LastIndexOf("\\"));
+			ShellExecute(this.Handle, "open", "explorer.exe", $"/select, \"{filename}\"", "", 1);
+		
+			//MessageBox.Show(filename,"Location",MessageBoxButtons.OK,MessageBoxIcon.Information);
+		}
+		[DllImport("shell32.dll")]
+		static extern IntPtr ShellExecute(IntPtr hwnd, string lpOperation, string lpFile, string lpParameters, string lpDirectory,int nCmdShow);
+		
 	}
 }
