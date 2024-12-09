@@ -84,18 +84,14 @@ namespace Hw_manager
 			toolStripStatusLabel1.Text = $"Processes count: {listViewProcesses.Items.Count}";
 			cpu = performanceCounterCPU.NextValue();
 			memory = performanceCounterRAM.NextValue();
+			labelCPUP.Text = Convert.ToString(Math.Round(cpu, 1))+ " %";
+			labelRam.Text= Convert.ToString(Math.Round((memory/100*installedMemory)/1000000000,1))+ " % ";
 			chart.Series["CPU"].Points.AddY(cpu);
 			chart.Series["RAM"].Points.AddY(memory);
 		}
 
-
-
 		[DllImport("shell32.dll", EntryPoint = "#61", CharSet = CharSet.Unicode)]
 		public static extern int RunFileDlg([In] IntPtr hwnd, [In] IntPtr icon, [In] string path, [In] string title, [In] string promt, [In] uint flags);
-
-
-
-
 
 		[DllImport("shell32.dll")]
 		static extern IntPtr ShellExecute(IntPtr hwnd, string lpOperation, string lpFile, string lpParameters, string lpDirectory, int nCmdShow);
@@ -159,7 +155,6 @@ namespace Hw_manager
 			public ulong ullTotalVirual;
 			public ulong ullAvailVirual;
 			public ulong ullAvailExtendedVirtual;
-
 			public MemoryStatisex()
 			{
 				this.dwLength = (uint)Marshal.SizeOf(typeof(MemoryStatisex));	
