@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace TaskManager
+namespace Hw_manager
 {
-	internal class ListViewColumnSorter : IComparer
+	public class ListViewColumnSorter: IComparer
 	{
 		int columnToSort;
 		SortOrder orderSort;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
@@ -11,101 +12,162 @@ namespace Hw_manager
 {
 	public partial class MainForm : Form
 	{
-		private string search = "";
-		private List<Process> processes = new List<Process>();
+		Dictionary<int, Process> processes;
+		ListViewColumnSorter lvColumnSorter;
+		private float cpu;
+		private float memory;
+		private ulong installedMemory;
 		public MainForm()
 		{
 			InitializeComponent();
-
-		}
-		private void LoadProcessesList()
-		{
-			processes = Process.GetProcesses().ToList();
-			for (int i = 0; i < processes.Count; i++)
+			LoadProcesses();
+			foreach (ColumnHeader ch in listViewProcesses.Columns)
+				ch.Width = -2;
+			lvColumnSorter = new ListViewColumnSorter();
+			listViewProcesses.ListViewItemSorter = lvColumnSorter;
+			MemoryStatisex m = new MemoryStatisex();
+			if (GlobalMemoryStatusEx(m))
 			{
-				string[] row = new string[] { processes[i].Id.ToString(), processes[i].ProcessName, (processes[i].PagedMemorySize / 1024).ToString(), processes[i].ProcessName };
-				listViewProcesses.Items.Add(new ListViewItem(row));
+				installedMemory = m.ullTotaPhys;
 			}
-			listViewProcesses.Sort();
+			lablelCpu.Text = Convert.ToString(installedMemory/1000000000)+" gb";
 		}
-		private void MainForm_Load(object sender, EventArgs e)
+		void LoadProcesses()
 		{
-			LoadProcessesList();
-		}
+			processes = Process.GetProcesses().ToDictionary(i => i.Id);
+			foreach (KeyValuePair<int, Process> p in processes)
+				AddNewProcesses(p.Value);
 
+
+		}
+		void AddNewProcesses()
+		{
+			foreach (KeyValuePair<int, Process> p in processes)
+				if (!listViewProcesses.Items.ContainsKey(p.Key.ToString()))
+					AddNewProcesses(p.Value);
+		}
+		void AddNewProcesses(Process p)
+		{
+			ListViewItem item = new ListViewItem();
+			item.Name = p.Id.ToString();
+			item.Text = p.ProcessName;
+			item.SubItems.Add(p.Id.ToString());
+			item.SubItems.Add((p.PagedMemorySize / 1024).ToString());// объем страничной памяти в байтах, выделенной для связанного процесса.
+			item.SubItems.Add((p.WorkingSet64/1024).ToString());//объем физической памяти в байтах	
+			item.SubItems.Add((p.PrivateMemorySize64/1024).ToString());//объем RAM памяти в байтах	
+																														
+																													
+			listViewProcesses.Items.Add(item);
+		}
+		void RemoveOldProcesses()
+		{
+			foreach (ListViewItem i in listViewProcesses.Items)
+			{
+				if (!processes.ContainsKey(Convert.ToInt32(i.SubItems[1].Text)))
+					listViewProcesses.Items.Remove(i);
+			}
+		}
+		void RefreshProcesses()
+		{
+			processes = Process.GetProcesses().ToDictionary(i => i.Id);
+			RemoveOldProcesses();
+			AddNewProcesses();
+
+		}
+		void DestroyProcess(int pid)
+		{
+			processes[pid].Kill();
+		}
 		private void timer_Tick(object sender, EventArgs e)
 		{
-			RefreshProcessesList();
+			RefreshProcesses();
+			toolStripStatusLabel1.Text = $"Processes count: {listViewProcesses.Items.Count}";
+			cpu = performanceCounterCPU.NextValue();
+			memory = performanceCounterRAM.NextValue();
+			chart.Series["CPU"].Points.AddY(cpu);
+			chart.Series["RAM"].Points.AddY(memory);
 		}
 
-		private void RefreshProcessesList()
-		{
-			Dictionary<int, Process> newProcess = Process.GetProcesses().ToDictionary(p => p.Id);
-			for (int i = listViewProcesses.Items.Count - 1; i >= 0; i--)
-			{
-				ListViewItem item = listViewProcesses.Items[i];
-				if (!newProcess.ContainsKey(Convert.ToInt32(item.Text)))
-				{
-					listViewProcesses.Items.Remove(item);
-				}
-			}
-			foreach (var item in newProcess)
-			{
-				if (listViewProcesses.Items.ContainsKey(item.Value.Id.ToString()) == false)
-				{
-				}
-				else
-				{
-					string [] row = new string[] { item.Value.Id.ToString(), item.Value.ProcessName, (item.Value.PagedMemorySize / 1024).ToString(),item.Value.ProcessName };
-					listViewProcesses.Items.Add(new ListViewItem(row));
 
-				}
-			}
-		}
-		
 
-		private void topmostToolStripMenuViewTopmost_Click(object sender, EventArgs e)
-		{
-			if (topmostToolStripMenuViewTopmost.Checked)
-				this.TopMost = true;
-			else this.TopMost = false;
+		[DllImport("shell32.dll", EntryPoint = "#61", CharSet = CharSet.Unicode)]
+		public static extern int RunFileDlg([In] IntPtr hwnd, [In] IntPtr icon, [In] string path, [In] string title, [In] string promt, [In] uint flags);
 
-		}
 
-		private void adressToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			ColumnHeader h = new ColumnHeader();
-			h.Name = "Adress";
-			h.Width = 120;
-			h.Text = "Adress";
-			if (adressToolStripMenuItem.Checked)
-			{
-				listViewProcesses.Columns.Add(h);
-				RefreshProcessesList();
-			}
-			else
-			{
-				listViewProcesses.Columns.RemoveAt(3);
-			}
-		}
+
+
+
+		[DllImport("shell32.dll")]
+		static extern IntPtr ShellExecute(IntPtr hwnd, string lpOperation, string lpFile, string lpParameters, string lpDirectory, int nCmdShow);
+
 
 		private void hightToolStripMenuViewRateL_Click(object sender, EventArgs e)
 		{
-			timer.Interval= 3000;
+			timer.Interval = 3000;
 		}
 
-		private void listViewProcesses_KeyPress(object sender, KeyPressEventArgs e)
+		private void destroyToolStripMenuItem_Click_1(object sender, EventArgs e)
 		{
-			//if ((!char.IsControl(e.KeyChar)) && (char.IsLetter(e.KeyChar)))
-			//{
-			//	e.Handled = true;
-			//	search += e.KeyChar.ToString();				
-			//	ListViewItem item = listViewProcesses.FindItemWithText(search);
-			//	listViewProcesses.Items[item.Index].Selected=true;
-			//	listViewProcesses.Items[item.Index].Focused= true;
-			//	//listViewProcesses.SelectedItems[item.Index].Selected = true;
-			//}
-			
+			if (Convert.ToInt32(listViewProcesses.SelectedItems.Count) > 0)
+				DestroyProcess(Convert.ToInt32(listViewProcesses.SelectedItems[0].Name));
 		}
+
+		private void contextMenuStripProcList_Opening(object sender, CancelEventArgs e)
+		{
+			if (Convert.ToInt32(listViewProcesses.SelectedItems.Count) <= 0)
+				destroyToolStripMenuItem.Enabled = openFileLocationToolStripMenuItem.Enabled = false;
+			else destroyToolStripMenuItem.Enabled = openFileLocationToolStripMenuItem.Enabled = true;
+		}
+
+		private void listViewProcesses_ColumnClick_1(object sender, ColumnClickEventArgs e)
+		{
+			if (e.Column == lvColumnSorter.SortColumn)
+			{
+				if (lvColumnSorter.Order == SortOrder.Ascending)
+					lvColumnSorter.Order = SortOrder.Descending;
+				else lvColumnSorter.Order = SortOrder.Ascending;
+			}
+			else
+			{
+				lvColumnSorter.SortColumn = e.Column;
+				lvColumnSorter.Order = SortOrder.Ascending;
+			}
+			listViewProcesses.Sort();
+		}
+
+		private void openFileLocationToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			string filename = processes[Convert.ToInt32(listViewProcesses.SelectedItems[0].Name)].MainModule.FileName;
+			ShellExecute(this.Handle, "open", "explorer.exe", $"/select, \"{filename}\"", "", 1);
+		}
+
+		private void runToolStripMenuFileRun_Click(object sender, EventArgs e)
+		{
+			//var allIdle = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+			//MessageBox.Show(allIdle.NextValue().ToString());
+			RunFileDlg(this.Handle, IntPtr.Zero, "C:\\Windows\\System32\\", null, null, 1);
+		}
+		[StructLayout(LayoutKind.Sequential,CharSet=CharSet.Auto)]
+		private class MemoryStatisex
+		{
+			public uint dwLength;
+			public uint dwMemoryLength;
+			public ulong ullTotaPhys;
+			public ulong ullAvailPhys;
+			public ulong ullTotalPageFile;
+			public ulong ullAvailPageFile;
+			public ulong ullTotalVirual;
+			public ulong ullAvailVirual;
+			public ulong ullAvailExtendedVirtual;
+
+			public MemoryStatisex()
+			{
+				this.dwLength = (uint)Marshal.SizeOf(typeof(MemoryStatisex));	
+			}
+		}
+		[return: MarshalAs(UnmanagedType.Bool)]
+		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+		static extern bool GlobalMemoryStatusEx([In,Out] MemoryStatisex lpBuffer);
+			
 	}
 }
